@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +29,7 @@ public class EmployeeController {
 	private IEmployeeService employeeService;
 	
 	@RequestMapping(value = "/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response<List<EmployeeResponse>> listGroup(@RequestBody Request<EmployeeRequest> rq ){
+    public Object listGroup(@RequestBody Request<EmployeeRequest> rq ){
     	Response<List<EmployeeResponse>> response = new Response<>();
 		
 		List<EmployeeResponse> employees = employeeService.getListEmployee();
@@ -38,7 +39,12 @@ public class EmployeeController {
 		}else {
 			response.setStatusResponse(ApiResponse.DATA_NOT_FOUND);
 		}
-    	return response;
+		
+		if (ObjectUtils.isEmpty(rq.getRequestHeader()) || ObjectUtils.isEmpty(rq.getRequestHeader().getChanel())) {
+			return response.getData();
+		}else {
+			return response;
+		}
     }
 	
 	
@@ -85,7 +91,7 @@ public class EmployeeController {
 	
 	
 	@RequestMapping(value = "/detail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response<EmployeeResponse> detailEmployee(@RequestBody Request<EmployeeRequest> rq ){
+    public Object detailEmployee(@RequestBody Request<EmployeeRequest> rq ){
     	Response<EmployeeResponse> response = new Response<>();
 		
     	EmployeeResponse rs = employeeService.getEmployeById(rq.getRequestPayload().getGroupId());
@@ -95,7 +101,11 @@ public class EmployeeController {
 		}else {
 			response.setStatusResponse(ApiResponse.DATA_NOT_FOUND);
 		}
-    	return response;
+		if (ObjectUtils.isEmpty(rq.getRequestHeader()) || ObjectUtils.isEmpty(rq.getRequestHeader().getChanel())) {
+			return response.getData();
+		}else {
+			return response;
+		}
     }
 	
 	

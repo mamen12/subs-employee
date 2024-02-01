@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.api.common.beans.beans.EmployeeRequest;
 import com.api.common.beans.beans.EmployeeResponse;
-import com.api.employee.model.Employee;
 
 public interface IEmployeeService {
 
