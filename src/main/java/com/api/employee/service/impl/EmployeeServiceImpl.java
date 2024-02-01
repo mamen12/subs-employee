@@ -31,8 +31,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		employee.setNama(rq.getNama());
 		employee.setTglLahir(rq.getTglLahir());
 		employee.setStatus(1);
-		employee.setGroupId(rq.getGroupId());
-		employee.setSaldoId(rq.getSaldoId());
+		employee.setGroupId(Long.valueOf(rq.getGroupId()));
+		employee.setSaldoId(Long.valueOf(rq.getSaldoId()));
 		employee.setCreatedAt(new Date());
 		
 		if (employeeRepository.countNameEmployee(employee.getNama()).equals(0)) {
