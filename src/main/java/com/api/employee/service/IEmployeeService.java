@@ -2,19 +2,21 @@ package com.api.employee.service;
 
 import java.util.List;
 
+import com.api.common.beans.beans.EmployeeRequest;
+import com.api.common.beans.beans.EmployeeResponse;
 import com.api.employee.model.Employee;
 
 public interface IEmployeeService {
 
-	public void saveEmployee(Employee employee);
+	public String saveEmployee(EmployeeRequest employee);
 	
-	public void updateEmployee(Employee employee);
+	public String updateEmployee(EmployeeRequest employee);
 	
-	public void deletedEmployee(Long id);
+	public String deletedEmployee(Long id);
 	
-	public List<Employee> getListEmployee();
+	public List<EmployeeResponse> getListEmployee();
 	
-	public Employee getEmployeById(Long id);
+	public EmployeeResponse getEmployeById(Long id);
 	
 	
 }
