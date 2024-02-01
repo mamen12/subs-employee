@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.catalina.mapper.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.api.common.beans.beans.EmployeeRequest;
 import com.api.common.beans.beans.EmployeeResponse;
@@ -15,6 +17,10 @@ import com.api.common.beans.constant.AppConstants;
 import com.api.employee.model.Employee;
 import com.api.employee.repository.EmployeeRepository;
 import com.api.employee.service.IEmployeeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.micrometer.common.util.StringUtils;
 
 @Service
 public class EmployeeServiceImpl implements IEmployeeService {
@@ -46,14 +52,15 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	}
 
 	@Override
-	public String updateEmployee(EmployeeRequest rq) {
+	public String updateEmployee(EmployeeRequest rq) throws JsonProcessingException {
+		ObjectMapper mapper= new ObjectMapper();
 		String rs = null;
-
+		logger.info(mapper.writeValueAsString(rq).toString());
 		try {
-			Employee employee = employeeRepository.findById(rq.getId()).orElseThrow();
+			Employee employee = employeeRepository.findById(Long.valueOf(rq.getId())).orElseThrow();
 			employee.setNama(rq.getNama());
 			employee.setUpdatedAt(new Date());
-			employee.setTglLahir(rq.getTglLahir());
+			employee.setTglLahir(ObjectUtils.isEmpty(rq.getTglLahir()) ? employee.getTglLahir(): rq.getTglLahir());
 			employeeRepository.save(employee);
 		} catch (Exception e) {
 			rs = AppConstants.DATA_NOT_FOUND;

@@ -16,6 +16,7 @@ import com.api.common.beans.beans.Request;
 import com.api.common.beans.beans.Response;
 import com.api.common.beans.constant.ApiResponse;
 import com.api.employee.service.IEmployeeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.micrometer.common.util.StringUtils;
 
@@ -63,7 +64,7 @@ public class EmployeeController {
 	
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response<String> updateEmployee(@RequestBody Request<EmployeeRequest> rq ){
+    public Response<String> updateEmployee(@RequestBody Request<EmployeeRequest> rq ) throws JsonProcessingException{
     	Response<String> response = new Response<>();
 		
 		String rs = employeeService.updateEmployee(rq.getRequestPayload());
@@ -80,7 +81,7 @@ public class EmployeeController {
     public Response<String> deleteEmployee(@RequestBody Request<EmployeeRequest> rq ){
     	Response<String> response = new Response<>();
 		
-		String rs = employeeService.deletedEmployee(rq.getRequestPayload().getGroupId());
+		String rs = employeeService.deletedEmployee(rq.getRequestPayload().getId());
 		if (StringUtils.isEmpty(rs)) {
 			response.setStatusResponse(ApiResponse.SUCCESS);
 		}else {
@@ -94,7 +95,7 @@ public class EmployeeController {
     public Object detailEmployee(@RequestBody Request<EmployeeRequest> rq ){
     	Response<EmployeeResponse> response = new Response<>();
 		
-    	EmployeeResponse rs = employeeService.getEmployeById(rq.getRequestPayload().getGroupId());
+    	EmployeeResponse rs = employeeService.getEmployeById(rq.getRequestPayload().getId());
 		if (rs != null) {
 			response.setData(rs);
 			response.setStatusResponse(ApiResponse.SUCCESS);
